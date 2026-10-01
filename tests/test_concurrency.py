@@ -839,7 +839,9 @@ class SigtermTest(CoverageTest):
         atexit_calls: list[str] = []
         real_atexit = cov._atexit
 
-        def reenter_atexit(event: str = "atexit") -> None:
+        # Runs inside stop/save, so metacov cannot see this body (same as
+        # the trailing lines in Coverage._on_sigterm).
+        def reenter_atexit(event: str = "atexit") -> None:  # pragma: not covered
             atexit_calls.append(event)
             if event == "sigterm" and atexit_calls.count("sigterm") == 1:
                 # The outer handler is inside stop/save: further SIGTERMs are
