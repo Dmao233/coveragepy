@@ -770,7 +770,9 @@ class Coverage(TConfigurable):
         # or raises from the data file the outer call is writing, and that
         # exception escapes into the interrupted program. Ignore it; the
         # outer call still re-raises SIGTERM after saving.
-        if self._sigterm_handling:
+        # The early-return path is only exercised from a nested call inside
+        # stop/save, so metacov cannot record it (same as the trailing lines).
+        if self._sigterm_handling:  # pragma: not covered
             return
         self._sigterm_handling = True
         try:
@@ -782,7 +784,7 @@ class Coverage(TConfigurable):
             # Statements after here won't be seen by metacov because we just wrote
             # the data, and are about to kill the process.
             signal.signal(signal.SIGTERM, self._old_sigterm)  # pragma: not covered
-            self._sigterm_handling = False
+            self._sigterm_handling = False  # pragma: not covered
         os.kill(os.getpid(), signal.SIGTERM)  # pragma: not covered
 
     def erase(self) -> None:

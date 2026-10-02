@@ -827,7 +827,7 @@ class SigtermTest(CoverageTest):
         # The nested call used to deadlock or raise out of the interrupted
         # frame (issue 2310). Call the handler directly so this doesn't depend
         # on signal timing.
-        cov = coverage.Coverage()
+        cov = coverage.Coverage(data_file="not_metacov_sigterm_reentry")
         cov.set_option("run:sigterm", True)
         previous = signal.getsignal(signal.SIGTERM)
 
@@ -869,7 +869,7 @@ class SigtermTest(CoverageTest):
         # data_lock and before it has released it. save() must not wait
         # forever on that same thread (issue 2310).
         self.make_file("prog.py", "a = 1\n")
-        cov = coverage.Coverage()
+        cov = coverage.Coverage(data_file="not_metacov_sigterm_lock")
         cov.set_option("run:sigterm", True)
         previous = signal.getsignal(signal.SIGTERM)
 
