@@ -900,7 +900,7 @@ class SigtermTest(CoverageTest):
             if cov._started:
                 cov.stop()
 
-        saved = coverage.CoverageData()
+        saved = coverage.CoverageData("not_metacov_sigterm_lock")
         saved.read()
         assert line_counts(saved).get("prog.py") == 1
 
