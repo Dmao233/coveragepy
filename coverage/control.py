@@ -770,16 +770,16 @@ class Coverage(TConfigurable):
         # or raises from the data file the outer call is writing, and that
         # exception escapes into the interrupted program. Ignore it; the
         # outer call still re-raises SIGTERM after saving.
-        # The early-return path is only exercised from a nested call inside
-        # stop/save, so metacov cannot record it (same as the trailing lines).
+        # The handler runs while the Coverage being tested is collecting, so
+        # metacov can't record any of it.
         if self._sigterm_handling:  # pragma: not covered
             return
-        self._sigterm_handling = True
-        try:
+        self._sigterm_handling = True  # pragma: not covered
+        try:  # pragma: not covered
             # Drop further SIGTERMs at the OS. The flag above covers a delivery
             # that was already inside this function before the disposition changes.
-            signal.signal(signal.SIGTERM, signal.SIG_IGN)
-            self._atexit("sigterm")
+            signal.signal(signal.SIGTERM, signal.SIG_IGN)  # pragma: not covered
+            self._atexit("sigterm")  # pragma: not covered
         finally:
             # Statements after here won't be seen by metacov because we just wrote
             # the data, and are about to kill the process.
